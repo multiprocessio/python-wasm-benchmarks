@@ -2,17 +2,21 @@ const { spawn } = require('child_process');
 
 const puppeteer = require('puppeteer');
 
+const version = process.argv[2];
+const verbose = process.argv.includes('--verbose');
+
 const port = '9798';
 const cp = spawn('python3', ['-m', 'http.server', port]);
-cp.stdout.on('data', (data) => {
-  console.log(data.toString());
-});
+if (verbose) {
+  cp.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
 
-cp.stderr.on('data', (data) => {
-  console.warn(data.toString());
-});
+  cp.stderr.on('data', (data) => {
+    console.warn(data.toString());
+  });
+}
 
-const version = process.argv[2];
 if (!version) {
   console.log('test is required argument (try coldbrew.html or pyodide.html)');
   process.exit(1);
@@ -21,15 +25,19 @@ if (!version) {
 (async () => {
   try {
     const browser = await puppeteer.launch({
+      // Required for coldbrew
       args: ['--enable-features=SharedArrayBuffer'],
     });
     const page = await browser.newPage();
 
-    //page.on('console', (d) => console.log(d));
+    if (verbose) {
+      page.on('console', (d) => console.log(d));
+    }
 
     ['error', 'pageerror'].forEach(typ => {
       page.on(typ, (e) => {
 	console.error(e);
+	process.exit(1);
       });
     });
 
@@ -38,7 +46,7 @@ if (!version) {
       waitUntil: ['load', 'domcontentloaded', 'networkidle0'],
     });
     const end = new Date();
-    console.log(end - start);
+    console.log((end - start) / 1000);
 
     await browser.close();
   } finally {

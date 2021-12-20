@@ -2,3 +2,5 @@
 node_modules
 yarn-*
 coverage
+results.csv
+bench.db
