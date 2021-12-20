@@ -1,9 +1,10 @@
-<script src="https://cdn.jsdelivr.net/pyodide/v0.18.0/full/pyodide.js"></script>
+<script src="/assets/pyodide/pyodide.js"></script>
 <script>
   (async function () {
       const pyodide = await window.loadPyodide({
-	  indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.18.0/full/',
+	  indexURL: '/assets/pyodide/',
       });
       pyodide.runPython('1 + 2');
+      throw new Error('benchmark done');
   })()
 </script>

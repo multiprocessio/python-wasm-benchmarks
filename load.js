@@ -34,22 +34,33 @@ if (!version) {
       page.on('console', (d) => console.log(d));
     }
 
+    let start;
     ['error', 'pageerror'].forEach(typ => {
       page.on(typ, (e) => {
+	if (String(e).startsWith('Error: Error: benchmark done')) {
+	  const end = new Date();
+	  console.log((end - start) / 1000);
+	  process.kill(cp.pid);
+	  process.exit(0);
+	}
+
 	console.error(e);
+	process.kill(cp.pid);
 	process.exit(1);
       });
     });
 
-    const start = new Date();
+    start = new Date();
     await page.goto(`http://localhost:${port}/${version}`, {
       waitUntil: ['load', 'domcontentloaded', 'networkidle0'],
     });
-    const end = new Date();
-    console.log((end - start) / 1000);
 
     await browser.close();
   } finally {
-    process.kill(cp.pid);
+    try {
+      process.kill(cp.pid);
+    } catch (e) {
+      console.error(e);
+    }
   }
 })();

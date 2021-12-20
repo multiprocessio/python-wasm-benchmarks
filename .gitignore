@@ -4,3 +4,4 @@ yarn-*
 coverage
 results.csv
 bench.db
+assets
