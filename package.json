@@ -1,0 +1,9 @@
+{
+  "name": "python-wasm-benchmark",
+  "version": "0.1.0",
+  "author": "Multiprocess Labs LLC",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "puppeteer": "^13.0.0"
+  }
+}
