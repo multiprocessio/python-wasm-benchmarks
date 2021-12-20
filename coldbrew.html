@@ -1,10 +1,7 @@
 <script src="https://cdn.jsdelivr.net/gh/plasticityai/coldbrew@0.0.74/dist/coldbrew.js"></script>
 <script>
-  if (!crossOriginIsolated) {
-      throw new Error('Cannot load SharedArrayBuffer');
-  }
   (async function () {
-      const coldbrew = window.Coldbrew.load();
-      coldbrew.run('1 + 2');
+      await Coldbrew.load();
+      Coldbrew.run('1 + 2');
   })();
 </script>
